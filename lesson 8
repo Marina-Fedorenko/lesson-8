@@ -1,0 +1,37 @@
+Определить кто больше поставил лайков (всего) - мужчины или женщины.
+у меня опять пока получилось только соединить 2 таблицы и отсортировать по полу:
+select profiles.gender, likes.user_id
+  from profiles 
+  join likes 
+  on profiles.user_id = likes.user_id
+ order by gender;
+ 
+ чтобы посчитать количество мужчин и женщин, нужно поставить что-то в функцию count, но я подставляла и gender, и user_id, выдает ошибку. 
+ select profiles.gender, likes.user_id, count (profiles.gender) as total
+   from profiles 
+   join likes 
+   on profiles.user_id = likes.user_id
+   group by profiles.gender
+   order by total
+   limit 1;
+   
+   
+   Подсчитать общее количество лайков десяти самым молодым пользователям (сколько лайков получили 10 самых молодых пользователей).
+   select profiles.birthday, target_id, target_type_id, sum(likes.target_type_id) as total
+from profiles 
+join likes 
+on profiles.user_id = likes.target_id and target_type_id = 2
+order by birthday
+desc limit 10;
+тут у меня выдает результат сколько лайков получил один пользователь, но он даже не самый молодой.
+
+Найти 10 пользователей, которые проявляют наименьшую активность в использовании социальной сети (использовала свою идею по наименьшему количеству размера файлов)
+select user_id, SUM(size) AS total
+from users 
+join media 
+on users.id = media.user_id 
+GROUP BY user_id
+HAVING total < 100000000
+ORDER BY total DESC
+limit 5; 
+результат выдает правильный.  
